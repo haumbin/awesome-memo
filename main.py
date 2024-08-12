@@ -18,5 +18,13 @@ def create_memo(memo:Memo): # Memo형식의 memo를 요청 파라미터로 받�
 def read_memo(): # 해당 함수를 동작한다.
     return memos # 서버의 배열값을 반환하여 응답해준다.
 
+@app.put("/memos/{memo_id}") # 해당 위치로 put 요청을 받을시
+def put_memo(req_memo:Memo): # 동작하는 함수 받은 값을 Memo형태의 객체로 변환 시킴
+    for memo in memos:  #memo라는 객체변수를 생성 그 객체변수를 memos배열 전체의 범위만큼 반복> memos의 기록된 메모들을 하나씩 체크
+        # for memo in memos:는 memos 리스트의 각 Memo 객체를 하나씩 memo라는 변수에 할당하면서 루프를 돌립니다.
+        if memo.id == req_memo.id: # 만약 객체memo의 id값이 요청받은 memo의 id와 같다면
+            memo.content=req_memo.content # 기존의 내용을 새로운 내용으로 수정한다.
+            return '메모 수정에 성공했습니다.'
+    return '요청한 메모는 존재하지 않습니다.'
 app.mount("/", StaticFiles(directory='static', html=True), name='static')
 # static 폴더에 있는 html파일을 호스팅을 요청한다.
