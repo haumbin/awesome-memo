@@ -17,20 +17,39 @@ async function editMemo(event) {
   });
   readMemo(); // 메모를 수정한 뒤 자연스럽게 다시 서버에 메모를 읽어오게 마지막에 동작시킨다.)
 }
+
+// 메모 내용을 삭제하는 함수
+async function deleteMemo(event) {
+  // console.log(event.target.dataset.id); // 이벤트가 실제로 발생한 HTML 요소를 확인
+  const id = event.target.dataset.id; //변수에 이벤트 발생시 대상 태그의 dataset-id 값을 받아 변수에 담는다.
+  const res = await fetch(`/memos/${id}`, {
+    // 서버로 양식대로 요청 후 응답 받은 값을 res에 담는다.
+    method: "DELETE", // 값을 지울 때 사용하는 전송방식
+  });
+  readMemo(); // 메모를 수정한 뒤 자연스럽게 다시 서버에 메모를 읽어오게 마지막에 동작시킨다.)
+}
+
 // html 화면에 받아온 메모 내용을 출력하는 함수
 function displayMemo(memo) {
   const ul = document.querySelector("#memo-ul"); // ul 영역을 변수에 담는다.
 
   const li = document.createElement("li"); // 해당 태그를 만드는 기능 창조해서 변수에 담는다.
-  li.innerText = `[id:${memo.id}] ${memo.content}`; //li태그 안에 내용을 삽입하는데 해당 형식의 값을 넣는다.
+  // li.innerText = `[id:${memo.id}] ${memo.content}`; //li태그 안에 내용을 삽입하는데 해당 형식의 값을 넣는다.
+  li.innerText = `${memo.content}`; //li태그 안에 내용을 삽입하는데 해당 형식의 값을 넣는다.
 
   const editBtn = document.createElement("button"); // 버튼을 생성해 변수에 담는다.
   editBtn.innerText = "수정하기";
   editBtn.addEventListener("click", editMemo); // 해당 버튼을 클릭했을 때 편집하는 함수 동작
   editBtn.dataset.id = memo.id; // js에서 dataset이라는 속성에 id값을 memo.id값으로 넣는다.
 
+  const delBtn = document.createElement("button");
+  delBtn.innerText = "삭제";
+  delBtn.addEventListener("click", deleteMemo);
+  delBtn.dataset.id = memo.id;
+
   ul.appendChild(li); // ul영역에 자식요소로 li태그를 더해준다? 삽입한다? 추가한다.
   li.appendChild(editBtn); // li영역에 자식요소로 버튼을 더해준다? 삽입한다? 추가한다.
+  li.appendChild(delBtn); // li영역에 자식요소로 버튼을 더해준다? 삽입한다? 추가한다.
 }
 
 readMemo();

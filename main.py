@@ -26,5 +26,15 @@ def put_memo(req_memo:Memo): # 동작하는 함수 받은 값을 Memo형태의 �
             memo.content=req_memo.content # 기존의 내용을 새로운 내용으로 수정한다.
             return '메모 수정에 성공했습니다.'
     return '요청한 메모는 존재하지 않습니다.'
+
+@app.delete("/memos/{memo_id}")
+def delete_memo(memo_id):
+    for index,memo in enumerate(memos): # enumerate(memos) : index값과 객체를 동시에 반환한다. (index, memo)의 형태로
+        if memo.id == memo_id: # memos의 각체를 순회하며 아이디 값과 입력받은 아이디 값이 일치한다면
+            memos.pop(index) # 순회 중  해당 객체의 인덱스번호를 가진 객체를 삭제한다 즉 대상을 삭제한다?
+            
+            return '메모 삭제에 성공했습니다.'
+    return '요청한 메모는 존재하지 않습니다.'
+
 app.mount("/", StaticFiles(directory='static', html=True), name='static')
 # static 폴더에 있는 html파일을 호스팅을 요청한다.
